@@ -27,6 +27,6 @@ services:
     restart: always
     ports:
       - "6379:6379"
-    network_mode: host
+    # network_mode: host #mac 上生效，win 上不用
 volumes:
   db_data:

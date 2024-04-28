@@ -11,22 +11,21 @@ datasource db {
 model config {
   create_time  DateTime @default(now()) @db.DateTime(6)
   update_time  DateTime @default(now()) @db.DateTime(6)
-  create_by    String   @default("") @db.VarChar(50)
-  update_by    String   @default("") @db.VarChar(50)
   remark       String   @default("") @db.VarChar(255)
   config_id    Int      @id @default(autoincrement())
   config_name  String   @default("") @db.VarChar(100)
   config_key   String   @default("") @db.VarChar(100)
   config_value String   @default("") @db.VarChar(500)
   config_type  String   @default("N") @db.Char(1)
+  version      Int
+  create_by    String   @default("") @db.VarChar(30)
+  update_by    String   @default("") @db.VarChar(30)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model dept {
   create_time     DateTime          @default(now()) @db.DateTime(6)
   update_time     DateTime          @default(now()) @db.DateTime(6)
-  create_by       String            @default("") @db.VarChar(50)
-  update_by       String            @default("") @db.VarChar(50)
   remark          String            @default("") @db.VarChar(255)
   dept_id         Int               @id @default(autoincrement())
   dept_name       String            @default("") @db.VarChar(50)
@@ -38,7 +37,10 @@ model dept {
   del_flag        String            @default("0") @db.Char(1)
   mpath           String?           @default("") @db.VarChar(255)
   parentDeptId    Int?
-  dept            dept?             @relation("deptTodept", fields: [parentDeptId], references: [dept_id], onDelete: Restrict, onUpdate: Restrict, map: "FK_427c332b4ebe1147caa3328adfa")
+  version         Int
+  create_by       String            @default("") @db.VarChar(30)
+  update_by       String            @default("") @db.VarChar(30)
+  dept            dept?             @relation("deptTodept", fields: [parentDeptId], references: [dept_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_427c332b4ebe1147caa3328adfa")
   other_dept      dept[]            @relation("deptTodept")
   role_depts_dept role_depts_dept[]
   user            user[]
@@ -50,8 +52,6 @@ model dept {
 model dict_data {
   create_time    DateTime   @default(now()) @db.DateTime(6)
   update_time    DateTime   @default(now()) @db.DateTime(6)
-  create_by      String     @default("") @db.VarChar(50)
-  update_by      String     @default("") @db.VarChar(50)
   remark         String     @default("") @db.VarChar(255)
   dict_data      Int        @id @default(autoincrement())
   dict_sort      Int        @default(0)
@@ -62,7 +62,10 @@ model dict_data {
   is_default     String     @default("N") @db.Char(1)
   status         String     @default("0") @db.Char(1)
   dictTypeDictId Int?
-  dict_type      dict_type? @relation(fields: [dictTypeDictId], references: [dict_id], onDelete: Restrict, onUpdate: Restrict, map: "FK_bddc8251ad1c1ed3bcad5208a15")
+  version        Int
+  create_by      String     @default("") @db.VarChar(30)
+  update_by      String     @default("") @db.VarChar(30)
+  dict_type      dict_type? @relation(fields: [dictTypeDictId], references: [dict_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_bddc8251ad1c1ed3bcad5208a15")
 
   @@index([dictTypeDictId], map: "FK_bddc8251ad1c1ed3bcad5208a15")
 }
@@ -71,13 +74,14 @@ model dict_data {
 model dict_type {
   create_time DateTime    @default(now()) @db.DateTime(6)
   update_time DateTime    @default(now()) @db.DateTime(6)
-  create_by   String      @default("") @db.VarChar(50)
-  update_by   String      @default("") @db.VarChar(50)
   remark      String      @default("") @db.VarChar(255)
   dict_id     Int         @id @default(autoincrement())
   dict_name   String      @default("") @db.VarChar(100)
   dict_type   String      @unique(map: "IDX_003e8d417dc1f24cd03575cb9e") @default("") @db.VarChar(100)
   status      String      @default("0") @db.Char(1)
+  version     Int
+  create_by   String      @default("") @db.VarChar(30)
+  update_by   String      @default("") @db.VarChar(30)
   dict_data   dict_data[]
 }
 
@@ -85,8 +89,6 @@ model dict_type {
 model job {
   create_time     DateTime @default(now()) @db.DateTime(6)
   update_time     DateTime @default(now()) @db.DateTime(6)
-  create_by       String   @default("") @db.VarChar(50)
-  update_by       String   @default("") @db.VarChar(50)
   remark          String   @default("") @db.VarChar(255)
   job_id          Int      @id @default(autoincrement())
   job_name        String   @default("") @db.VarChar(64)
@@ -96,6 +98,9 @@ model job {
   misfire_policy  String   @default("3") @db.VarChar(20)
   concurrent      String   @default("1") @db.Char(1)
   status          String   @default("0") @db.Char(1)
+  version         Int
+  create_by       String   @default("") @db.VarChar(30)
+  update_by       String   @default("") @db.VarChar(30)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -127,8 +132,6 @@ model logininfor {
 model menu {
   create_time     DateTime          @default(now()) @db.DateTime(6)
   update_time     DateTime          @default(now()) @db.DateTime(6)
-  create_by       String            @default("") @db.VarChar(50)
-  update_by       String            @default("") @db.VarChar(50)
   remark          String            @default("") @db.VarChar(255)
   menu_id         Int               @id @default(autoincrement())
   menu_name       String            @db.VarChar(50)
@@ -137,7 +140,6 @@ model menu {
   component       String?           @db.VarChar(255)
   query           String?           @db.VarChar(255)
   is_frame        Int               @default(1)
-  is_cache        Int               @default(0)
   menu_type       String            @default("") @db.Char(1)
   visible         String            @default("0") @db.Char(1)
   status          String            @default("0") @db.Char(1)
@@ -145,7 +147,11 @@ model menu {
   icon            String            @default("#") @db.Char(100)
   mpath           String?           @default("") @db.VarChar(255)
   parentMenuId    Int?
-  menu            menu?             @relation("menuTomenu", fields: [parentMenuId], references: [menu_id], onDelete: Restrict, onUpdate: Restrict, map: "FK_fbe2023241bd4c612415c080cc6")
+  version         Int
+  create_by       String            @default("") @db.VarChar(30)
+  update_by       String            @default("") @db.VarChar(30)
+  is_cache        String            @default("0") @db.Char(1)
+  menu            menu?             @relation("menuTomenu", fields: [parentMenuId], references: [menu_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_fbe2023241bd4c612415c080cc6")
   other_menu      menu[]            @relation("menuTomenu")
   role_menus_menu role_menus_menu[]
 
@@ -156,14 +162,15 @@ model menu {
 model notice {
   create_time    DateTime @default(now()) @db.DateTime(6)
   update_time    DateTime @default(now()) @db.DateTime(6)
-  create_by      String   @default("") @db.VarChar(50)
-  update_by      String   @default("") @db.VarChar(50)
   remark         String   @default("") @db.VarChar(255)
   notice_id      Int      @id @default(autoincrement())
   notice_title   String   @db.VarChar(50)
   notice_type    String   @db.Char(1)
   notice_content String?  @db.LongText
   status         String   @default("0") @db.Char(1)
+  version        Int
+  create_by      String   @default("") @db.VarChar(30)
+  update_by      String   @default("") @db.VarChar(30)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -190,14 +197,15 @@ model oper_log {
 model post {
   create_time     DateTime          @default(now()) @db.DateTime(6)
   update_time     DateTime          @default(now()) @db.DateTime(6)
-  create_by       String            @default("") @db.VarChar(50)
-  update_by       String            @default("") @db.VarChar(50)
   remark          String            @default("") @db.VarChar(255)
   post_id         Int               @id @default(autoincrement())
   post_code       String            @unique(map: "IDX_4365bf877a23182bde2156ec6e") @db.VarChar(64)
   post_name       String            @db.VarChar(50)
   post_sort       Int
   status          String            @db.Char(1)
+  version         Int
+  create_by       String            @default("") @db.VarChar(30)
+  update_by       String            @default("") @db.VarChar(30)
   user_posts_post user_posts_post[]
 }
 
@@ -205,8 +213,6 @@ model post {
 model role {
   create_time         DateTime          @default(now()) @db.DateTime(6)
   update_time         DateTime          @default(now()) @db.DateTime(6)
-  create_by           String            @default("") @db.VarChar(50)
-  update_by           String            @default("") @db.VarChar(50)
   remark              String            @default("") @db.VarChar(255)
   role_id             Int               @id @default(autoincrement())
   role_name           String            @db.VarChar(30)
@@ -217,6 +223,9 @@ model role {
   dept_check_strictly Int               @default(1) @db.TinyInt
   status              String            @db.Char(1)
   del_flag            String            @default("0") @db.Char(1)
+  version             Int
+  create_by           String            @default("") @db.VarChar(30)
+  update_by           String            @default("") @db.VarChar(30)
   role_depts_dept     role_depts_dept[]
   role_menus_menu     role_menus_menu[]
   user_roles_role     user_roles_role[]
@@ -225,7 +234,7 @@ model role {
 model role_depts_dept {
   roleRoleId Int
   deptDeptId Int
-  dept       dept @relation(fields: [deptDeptId], references: [dept_id], onUpdate: Restrict, map: "FK_a6df3f8f1af0e6fcd2424ff467c")
+  dept       dept @relation(fields: [deptDeptId], references: [dept_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_a6df3f8f1af0e6fcd2424ff467c")
   role       role @relation(fields: [roleRoleId], references: [role_id], onDelete: Cascade, map: "FK_c38adaee013585bdc3f36a4edcf")
 
   @@id([roleRoleId, deptDeptId])
@@ -236,7 +245,7 @@ model role_depts_dept {
 model role_menus_menu {
   roleRoleId Int
   menuMenuId Int
-  menu       menu @relation(fields: [menuMenuId], references: [menu_id], onUpdate: Restrict, map: "FK_5b29b58ccc52b56f0a1ad629209")
+  menu       menu @relation(fields: [menuMenuId], references: [menu_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_5b29b58ccc52b56f0a1ad629209")
   role       role @relation(fields: [roleRoleId], references: [role_id], onDelete: Cascade, map: "FK_d770d9678ced1d5a050126672fa")
 
   @@id([roleRoleId, menuMenuId])
@@ -248,8 +257,6 @@ model role_menus_menu {
 model user {
   create_time     DateTime          @default(now()) @db.DateTime(6)
   update_time     DateTime          @default(now()) @db.DateTime(6)
-  create_by       String            @default("") @db.VarChar(50)
-  update_by       String            @default("") @db.VarChar(50)
   remark          String            @default("") @db.VarChar(255)
   user_id         Int               @id @default(autoincrement())
   user_name       String            @db.VarChar(30)
@@ -266,7 +273,10 @@ model user {
   login_ip        String            @default("") @db.VarChar(128)
   login_date      DateTime?         @db.DateTime(0)
   deptDeptId      Int?
-  dept            dept?             @relation(fields: [deptDeptId], references: [dept_id], onDelete: Restrict, onUpdate: Restrict, map: "FK_d61db9f4f5464b51df4bd6f2332")
+  version         Int
+  create_by       String            @default("") @db.VarChar(30)
+  update_by       String            @default("") @db.VarChar(30)
+  dept            dept?             @relation(fields: [deptDeptId], references: [dept_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_d61db9f4f5464b51df4bd6f2332")
   user_posts_post user_posts_post[]
   user_roles_role user_roles_role[]
 
@@ -277,7 +287,7 @@ model user_posts_post {
   userUserId Int
   postPostId Int
   user       user @relation(fields: [userUserId], references: [user_id], onDelete: Cascade, map: "FK_28fca0ded6fc3ab66b451623f05")
-  post       post @relation(fields: [postPostId], references: [post_id], onUpdate: Restrict, map: "FK_3511ec6a3e38572359525a85502")
+  post       post @relation(fields: [postPostId], references: [post_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_3511ec6a3e38572359525a85502")
 
   @@id([userUserId, postPostId])
   @@index([userUserId], map: "IDX_28fca0ded6fc3ab66b451623f0")
@@ -288,7 +298,7 @@ model user_roles_role {
   userUserId Int
   roleRoleId Int
   user       user @relation(fields: [userUserId], references: [user_id], onDelete: Cascade, map: "FK_0bd606ba8531dd93b457b8486d9")
-  role       role @relation(fields: [roleRoleId], references: [role_id], onUpdate: Restrict, map: "FK_56f8ede2f2e059d4db74591c533")
+  role       role @relation(fields: [roleRoleId], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_56f8ede2f2e059d4db74591c533")
 
   @@id([userUserId, roleRoleId])
   @@index([userUserId], map: "IDX_0bd606ba8531dd93b457b8486d")

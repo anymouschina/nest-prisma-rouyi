@@ -15,7 +15,7 @@ export default defineConfig({
   // typeorm 配置
   database: {
     type: 'mysql', //数据库类型
-    host: process.env.MYSQL_HOST || '127.0.0.1', //数据库地址
+    host: process.env.MYSQL_HOST || 'localhost', //数据库地址
     port: process.env.MYSQL_PORT || 3306, //数据库端口
     username: process.env.MYSQL_USERNAME || 'root', //数据库账号
     password: process.env.MYSQL_PASSWORD || 'example', //数据库密码
